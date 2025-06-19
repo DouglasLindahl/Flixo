@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import LogoutButton from "@/components/logoutButton/page";
 import styled from "styled-components";
 import Modal from "@/components/modal/page";
 import AddMovie from "@/components/addMovie/page";

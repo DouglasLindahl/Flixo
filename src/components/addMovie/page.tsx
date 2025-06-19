@@ -2,8 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import styled from "styled-components";
-import supabase from "../../../supabase"; // adjust path
-import { useRouter } from "next/navigation";
+import supabase from "../../../supabase";
 import colors from "../../../theme";
 
 const FormContainer = styled.form`
