@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import styled from "styled-components";
 import supabase from "../../../supabase";
 import colors from "../../../theme";
+import MovieSearch from "../movieSearch/page";
 
 const FormContainer = styled.form`
   background: ${colors.secondary};
@@ -78,7 +79,10 @@ const Message = styled.p<{ error?: boolean }>`
 `;
 
 export default function AddMovie() {
-  const [title, setTitle] = useState("");
+  const [selectedMovie, setSelectedMovie] = useState<{
+    id: number;
+    title: string;
+  } | null>(null);
   const [rating, setRating] = useState("5");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -86,6 +90,11 @@ export default function AddMovie() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!selectedMovie) {
+      setError("Please select a movie from the search.");
+      return;
+    }
+
     setLoading(true);
     setMessage("");
     setError("");
@@ -104,7 +113,8 @@ export default function AddMovie() {
     const { error } = await supabase.from("user_movies").insert([
       {
         user_id: user.id,
-        movie_title: title,
+        movie_id: selectedMovie.id,
+        movie_title: selectedMovie.title,
         rating: parseInt(rating),
       },
     ]);
@@ -112,8 +122,8 @@ export default function AddMovie() {
     if (error) {
       setError("Failed to add movie: " + error.message);
     } else {
-      setMessage(`Added "${title}" with rating ${rating}`);
-      setTitle("");
+      setMessage(`Added "${selectedMovie.title}" with rating ${rating}`);
+      setSelectedMovie(null);
       setRating("5");
     }
     setLoading(false);
@@ -123,13 +133,12 @@ export default function AddMovie() {
     <FormContainer onSubmit={handleSubmit}>
       {error && <Message error>{error}</Message>}
       {message && <Message>{message}</Message>}
-      <Input
-        type="text"
-        placeholder="Movie title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
+
+      <MovieSearch
+        apiKey={process.env.NEXT_PUBLIC_TMDB_KEY || ""}
+        onSelectMovie={(movie) => setSelectedMovie(movie)}
       />
+
       <Select
         value={rating}
         onChange={(e) => setRating(e.target.value)}

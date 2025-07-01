@@ -3,17 +3,18 @@ import { useState } from "react";
 import styled from "styled-components";
 import Modal from "@/components/modal/page";
 import AddMovie from "@/components/addMovie/page";
+import colors from "../../../theme";
 
 const StyledDashboard = styled.div`
   height: 100vh;
   width: 100vw;
-  background-color: orange;
+  background-color: ${colors.background};
   display: flex;
   flex-direction: row;
 `;
 
 const RightSideBar = styled.div`
-  background-color: purple;
+  background-color: ${colors.secondary};
   width: 20%;
   height: 100%;
   display: flex;
@@ -21,11 +22,12 @@ const RightSideBar = styled.div`
 `;
 
 const LeftSideBar = styled.div`
-  background-color: blue;
+  background-color: ${colors.background};
   width: 80%;
   height: 100%;
   padding: 1rem;
   overflow-y: auto;
+  color: ${colors.text};
 `;
 
 const TabButtons = styled.div`
@@ -60,7 +62,7 @@ const GroupsList = styled.div`
 `;
 const OpenButton = styled.button`
   padding: 0.75rem 1rem;
-  background-color: #7d49b8;
+  background-color: ${colors.accent};
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -78,8 +80,6 @@ export default function Dashboard() {
   const [showAddMovie, setShowAddMovie] = useState(false);
   return (
     <StyledDashboard>
-      <OpenButton onClick={() => setShowAddMovie(true)}>Add Movie</OpenButton>
-
       {showAddMovie && (
         <Modal onClose={() => setShowAddMovie(false)}>
           <AddMovie />
@@ -87,6 +87,7 @@ export default function Dashboard() {
       )}
       <LeftSideBar>
         <h2>Recommendations for You</h2>
+        <OpenButton onClick={() => setShowAddMovie(true)}>Add Movie</OpenButton>
       </LeftSideBar>
 
       <RightSideBar>
