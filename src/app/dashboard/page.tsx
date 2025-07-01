@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
 import styled from "styled-components";
-import Modal from "@/components/modal/page";
-import AddMovie from "@/components/addMovie/page";
 import colors from "../../../theme";
+import { MovieSlideshow } from "@/components/movieSlideshow/page";
 
 const StyledDashboard = styled.div`
   height: 100vh;
@@ -11,6 +10,7 @@ const StyledDashboard = styled.div`
   background-color: ${colors.background};
   display: flex;
   flex-direction: row;
+  padding: 24px;
 `;
 
 const RightSideBar = styled.div`
@@ -19,6 +19,8 @@ const RightSideBar = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
 `;
 
 const LeftSideBar = styled.div`
@@ -75,19 +77,39 @@ const OpenButton = styled.button`
   }
 `;
 
+const mockMovies = [
+  {
+    title: "Inception",
+    posterUrl:
+      "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+  },
+  {
+    title: "The Dark Knight",
+    posterUrl:
+      "https://image.tmdb.org/t/p/w500/rqAHkvXldb9tHlnbQDwOzRi0yVD.jpg",
+  },
+  {
+    title: "Interstellar",
+    posterUrl:
+      "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+  },
+];
+
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"groups" | "friends">("groups");
-  const [showAddMovie, setShowAddMovie] = useState(false);
+
   return (
     <StyledDashboard>
-      {showAddMovie && (
-        <Modal onClose={() => setShowAddMovie(false)}>
-          <AddMovie />
-        </Modal>
-      )}
       <LeftSideBar>
-        <h2>Recommendations for You</h2>
-        <OpenButton onClick={() => setShowAddMovie(true)}>Add Movie</OpenButton>
+        <div
+          style={{
+            backgroundColor: "#000",
+            minHeight: "0vh",
+            padding: "0px",
+          }}
+        >
+          <MovieSlideshow header="Recently Watched" movies={mockMovies} />
+        </div>
       </LeftSideBar>
 
       <RightSideBar>
